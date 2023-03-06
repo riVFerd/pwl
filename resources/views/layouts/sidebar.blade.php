@@ -55,6 +55,24 @@
                         <p>Pengalaman Kuliah</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ url('/hobby') }}" class="nav-link">
+                        <i class="nav-icon fas fa-heart"></i>
+                        <p>Hobby</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url('/experience') }}" class="nav-link">
+                        <i class="nav-icon fas fa-home"></i>
+                        <p>Keluarga</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url('/experience') }}" class="nav-link">
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>Mata Kuliah</p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
