@@ -29,21 +29,21 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/dashboard');
 
-Route::get('/home', [HomeController::class, 'index']);
-
-Route::prefix('/product')->group(callback: function () {
-    Route::get('/', [ProductController::class, 'index']);
-});
-
-Route::get('/news/{page}', [NewsController::class, 'index']);
-
-Route::prefix('/program')->group(function () {
-    Route::get('/', [ProgramController::class, 'index']);
-});
-
-Route::get('/about-us', [AboutUsController::class, 'index']);
-
-Route::resource('/contact-us', ContactUsController::class);
+//Route::get('/home', [HomeController::class, 'index']);
+//
+//Route::prefix('/product')->group(callback: function () {
+//    Route::get('/', [ProductController::class, 'index']);
+//});
+//
+//Route::get('/news/{page}', [NewsController::class, 'index']);
+//
+//Route::prefix('/program')->group(function () {
+//    Route::get('/', [ProgramController::class, 'index']);
+//});
+//
+//Route::get('/about-us', [AboutUsController::class, 'index']);
+//
+//Route::resource('/contact-us', ContactUsController::class);
 
 // Week 3 - praktikum 2
 Route::get('/dashboard', [DashboardController::class, 'index']);
