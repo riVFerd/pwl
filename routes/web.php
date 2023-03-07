@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\HobbyController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\KendaraanController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ProductController;
@@ -54,3 +55,4 @@ Route::get('/experience', [ExperienceController::class, 'index']);
 // Week 4 - praktikum 1
 Route::get('/kendaraan', [KendaraanController::class, 'index']);
 Route::get('/hobby', [HobbyController::class, 'index']);
+Route::get('/keluarga', [KeluargaController::class, 'index']);

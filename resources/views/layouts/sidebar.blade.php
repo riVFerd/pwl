@@ -62,7 +62,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url('/experience') }}" class="nav-link">
+                    <a href="{{ url('/keluarga') }}" class="nav-link">
                         <i class="nav-icon fas fa-home"></i>
                         <p>Keluarga</p>
                     </a>
