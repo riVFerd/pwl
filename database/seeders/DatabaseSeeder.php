@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
 //            KendaraanSeeder::class,
 //            HobbySeeder::class
-            KeluargaSeeder::class
+//            KeluargaSeeder::class
+//            MataKuliahSeeder::class
         ]);
     }
 }

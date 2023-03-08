@@ -68,7 +68,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url('/experience') }}" class="nav-link">
+                    <a href="{{ url('/matakuliah') }}" class="nav-link">
                         <i class="nav-icon fas fa-book"></i>
                         <p>Mata Kuliah</p>
                     </a>
