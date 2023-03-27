@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutUsController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExperienceController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,8 +32,6 @@ use Illuminate\Support\Facades\Route;
 //    return view('welcome');
 //});
 
-Route::redirect('/', '/dashboard');
-
 //Route::get('/home', [HomeController::class, 'index']);
 //
 //Route::prefix('/product')->group(callback: function () {
@@ -48,13 +48,18 @@ Route::redirect('/', '/dashboard');
 //
 //Route::resource('/contact-us', ContactUsController::class);
 
-// Week 3 - praktikum 2
-Route::get('/dashboard', [DashboardController::class, 'index']);
-Route::get('/profile', [ProfileController::class, 'index']);
-Route::get('/experience', [ExperienceController::class, 'index']);
+// Week 5 - praktikum 1
+Auth::routes();
+Route::get('/logout', [LoginController::class, 'logout']);
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-// Week 4 - praktikum 1
-Route::get('/kendaraan', [KendaraanController::class, 'index']);
-Route::get('/hobby', [HobbyController::class, 'index']);
-Route::get('/keluarga', [KeluargaController::class, 'index']);
-Route::get('/matakuliah', [MataKuliahController::class, 'index']);
+Route::middleware(['auth'])->group(function () {
+    Route::redirect('/', '/dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/profile', [ProfileController::class, 'index']);
+    Route::get('/experience', [ExperienceController::class, 'index']);
+    Route::get('/kendaraan', [KendaraanController::class, 'index']);
+    Route::get('/hobby', [HobbyController::class, 'index']);
+    Route::get('/keluarga', [KeluargaController::class, 'index']);
+    Route::get('/matakuliah', [MataKuliahController::class, 'index']);
+});
