@@ -9,6 +9,7 @@ use App\Http\Controllers\HobbyController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KeluargaController;
 use App\Http\Controllers\KendaraanController;
+use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\MataKuliahController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\ProductController;
@@ -28,27 +29,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-
-//Route::get('/home', [HomeController::class, 'index']);
-//
-//Route::prefix('/product')->group(callback: function () {
-//    Route::get('/', [ProductController::class, 'index']);
-//});
-//
-//Route::get('/news/{page}', [NewsController::class, 'index']);
-//
-//Route::prefix('/program')->group(function () {
-//    Route::get('/', [ProgramController::class, 'index']);
-//});
-//
-//Route::get('/about-us', [AboutUsController::class, 'index']);
-//
-//Route::resource('/contact-us', ContactUsController::class);
-
-// Week 5 - praktikum 1
 Auth::routes();
 Route::get('/logout', [LoginController::class, 'logout']);
 Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -62,4 +42,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/hobby', [HobbyController::class, 'index']);
     Route::get('/keluarga', [KeluargaController::class, 'index']);
     Route::get('/matakuliah', [MataKuliahController::class, 'index']);
+
+    Route::resource('/mahasiswa', MahasiswaController::class)->parameter('mahasiswa', 'id');
 });
