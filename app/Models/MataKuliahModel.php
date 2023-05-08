@@ -9,4 +9,9 @@ class MataKuliahModel extends Model
 {
     use HasFactory;
     protected $table = 'matakuliah';
+
+    function mahasiswa_matakuliah()
+    {
+        return $this->hasMany(MahasiswaMataKuliahModel::class);
+    }
 }

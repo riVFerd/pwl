@@ -14,6 +14,32 @@
                 <li class="list-group-item"><b>Alamat : </b>{{ $mahasiswa->alamat }}</li>
                 <li class="list-group-item"><b>No. Hp : </b>{{ $mahasiswa->hp }}</li>
             </ul>
+            <table class="table table-bordered table-striped mt-2 text-center">
+                <thead>
+                <tr>
+                    <th>MataKuliah</th>
+                    <th>SKS</th>
+                    <th>Semester</th>
+                    <th>Nilai</th>
+                </tr>
+                </thead>
+                <tbody>
+                @if($khs->count() > 0)
+                    @foreach($khs as $row)
+                        <tr>
+                            <td>{{ $row->matakuliah->nama }}</td>
+                            <td>{{ $row->matakuliah->sks }}</td>
+                            <td>{{ $row->matakuliah->semester }}</td>
+                            <td>{{ $row->nilai}}</td>
+                        </tr>
+                    @endforeach
+                @else
+                    <tr>
+                        <td colspan="6" class="text-center">Data tidak ada</td>
+                    </tr>
+                @endif
+                </tbody>
+            </table>
         </div>
     </div>
 @endsection
