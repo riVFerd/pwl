@@ -10,6 +10,7 @@ class MahasiswaModel extends Model
     use HasFactory;
     protected $table = 'mahasiswa';
     protected $fillable = [
+        'prodi_id',
         'nim',
         'nama',
         'jk',
@@ -18,4 +19,9 @@ class MahasiswaModel extends Model
         'alamat',
         'hp'
     ];
+
+    function prodi()
+    {
+        return $this->hasOne(ProdiModel::class, 'prodi_id', 'prodi_id');
+    }
 }
