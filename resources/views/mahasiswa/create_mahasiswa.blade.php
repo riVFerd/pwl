@@ -33,6 +33,14 @@
                     @enderror
                 </div>
                 <div class="form-group">
+                    <label for="inputKelas">Kelas</label>
+                    <select class="form-control" id="inputKelas" name="kelas_id">
+                        @foreach($kelas as $kls)
+                            <option value="{{ $kls->id }}" @isset($mhs) @selected($mhs->kelas->id == $kls->id) @endisset>{{ $kls->nama_kelas }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="inputJK">Jenis Kelamin</label>
                     <select type="text" id="inputJK" class="form-control" name="jk">
                         <option value="L" @isset($mhs) @selected($mhs->jk == 'L') @endisset>Laki-laki</option>

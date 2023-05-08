@@ -22,7 +22,7 @@
                        <th>No</th>
                        <th>NIM</th>
                        <th>Nama</th>
-                       <th>Prodi</th>
+                       <th>Kelas</th>
                        <th>Jenis Kelamin</th>
                        <th>No. Hp</th>
                        <th>Action</th>
@@ -35,10 +35,13 @@
                                 <td>{{ ++$i }}</td>
                                 <td>{{ $m->nim }}</td>
                                 <td>{{ $m->nama }}</td>
-                                <td>{{ $m->prodi->prodi }}</td>
+                                <td>{{ $m->kelas->nama_kelas }}</td>
                                 <td>{{ $m->jk }}</td>
                                 <td>{{ $m->hp }}</td>
                                 <td class="">
+                                    <a href="{{ url('/mahasiswa/' . $m->id) }}" class="btn btn-sm btn-info">
+                                        Show
+                                    </a>
                                     <a href="{{ url('/mahasiswa/' . $m->id . '/edit') }}" class="btn btn-sm btn-warning">
                                         Edit
                                     </a>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KelasModel;
 use App\Models\MahasiswaModel;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class MahasiswaController extends Controller
      */
     public function index()
     {
-        $mhs = MahasiswaModel::all();
+        $mhs = MahasiswaModel::with('kelas')->get();
         return view('mahasiswa.mahasiswa', ['mhs' => $mhs]);
     }
 
@@ -25,7 +26,8 @@ class MahasiswaController extends Controller
      */
     public function create()
     {
-        return view('mahasiswa.create_mahasiswa', ['url_form' => url('/mahasiswa')]);
+        $kelas = KelasModel::all();
+        return view('mahasiswa.create_mahasiswa', ['url_form' => url('/mahasiswa'), 'kelas' => $kelas]);
     }
 
     /**
@@ -55,9 +57,10 @@ class MahasiswaController extends Controller
      * @param  \App\Models\MahasiswaModel  $mahasiswa
      * @return \Illuminate\Http\Response
      */
-    public function show(MahasiswaModel $mahasiswa)
+    public function show($id)
     {
-        //
+        $mahasiswa = MahasiswaModel::find($id);
+        return view('mahasiswa.show_mahasiswa', ['mahasiswa' => $mahasiswa]);
     }
 
     /**
@@ -68,8 +71,9 @@ class MahasiswaController extends Controller
      */
     public function edit($id)
     {
+        $kelas = KelasModel::all();
         $mahasiswa = MahasiswaModel::find($id);
-        return view('mahasiswa.create_mahasiswa', ['mhs' => $mahasiswa, 'url_form' => url('/mahasiswa/' . $id)]);
+        return view('mahasiswa.create_mahasiswa', ['mhs' => $mahasiswa, 'url_form' => url('/mahasiswa/' . $id), 'kelas' => $kelas]);
     }
 
     /**
