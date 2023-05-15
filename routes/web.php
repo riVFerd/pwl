@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutUsController;
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\DashboardController;
@@ -44,4 +45,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/matakuliah', [MataKuliahController::class, 'index']);
 
     Route::resource('/mahasiswa', MahasiswaController::class)->parameter('mahasiswa', 'id');
+    Route::resource('/articles', ArticleController::class);
 });
