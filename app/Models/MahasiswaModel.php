@@ -19,7 +19,8 @@ class MahasiswaModel extends Model
         'tanggal_lahir',
         'alamat',
         'hp',
-        'kelas_id'
+        'kelas_id',
+        'foto'
     ];
 
     function prodi()

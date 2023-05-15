@@ -4,6 +4,9 @@
     <div class="card">
         <div class="card-header">
             <h1>Detail Mahasiswa</h1>
+            <div class="d-flex justify-content-center">
+                <img src="{{ asset('storage/' . $mahasiswa->foto) }}" width="240">
+            </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item"><b>Nim : </b>{{ $mahasiswa->nim }}</li>
                 <li class="list-group-item"><b>Nama : </b>{{ $mahasiswa->nama }}</li>
@@ -14,6 +17,7 @@
                 <li class="list-group-item"><b>Alamat : </b>{{ $mahasiswa->alamat }}</li>
                 <li class="list-group-item"><b>No. Hp : </b>{{ $mahasiswa->hp }}</li>
             </ul>
+            <a href="{{ url('/mhs/cetak_pdf/' . $mahasiswa->id) }}" class="btn btn-primary">Cetak KRS</a>
             <table class="table table-bordered table-striped mt-2 text-center">
                 <thead>
                 <tr>
