@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\KelasModel;
 use App\Models\MahasiswaMataKuliahModel;
 use App\Models\MahasiswaModel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class MahasiswaController extends Controller
@@ -43,12 +44,26 @@ class MahasiswaController extends Controller
             'nim' => 'required|string|max:10|unique:mahasiswa,nim',
             'nama' => 'required|string|max:50',
             'jk' => 'required||in:L,P',
+            'foto' => 'required|image|mimes:jpeg,png,jpg',
             'tempat_lahir' => 'required|string|max:50',
             'tanggal_lahir' => 'required|date',
             'alamat' => 'required|string|max:255',
             'hp' => 'required|digits_between:6,15'
         ]);
-        MahasiswaModel::create($request->all());
+
+        $image_name = $request->file('foto')->store('images', 'public');
+
+        MahasiswaModel::create([
+            'nim' => $request->nim,
+            'nama' => $request->nama,
+            'foto' => $image_name,
+            'jk' => $request->jk,
+            'tempat_lahir' => $request->tempat_lahir,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'alamat' => $request->alamat,
+            'hp' => $request->hp,
+            'kelas_id' => $request->kelas_id,
+        ]);
         return redirect('/mahasiswa')->with('success', 'Mahasiswa Berhasil Ditambahkan!');
     }
 
@@ -90,13 +105,28 @@ class MahasiswaController extends Controller
         $request->validate([
             'nim' => 'required|string|max:10|unique:mahasiswa,nim,' . $id,
             'nama' => 'required|string|max:50',
+            'foto' => 'image|mimes:jpeg,png,jpg',
             'jk' => 'required||in:L,P',
             'tempat_lahir' => 'required|string|max:50',
             'tanggal_lahir' => 'required|date',
             'alamat' => 'required|string|max:255',
             'hp' => 'required|digits_between:6,15'
         ]);
-        MahasiswaModel::where('id', $id)->update($request->except('_token', '_method'));
+
+        $image_name = $request->file('foto')->store('images', 'public');
+
+        MahasiswaModel::where('id', $id)->update([
+            'nim' => $request->nim,
+            'nama' => $request->nama,
+            'foto' => $image_name,
+            'jk' => $request->jk,
+            'tempat_lahir' => $request->tempat_lahir,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'alamat' => $request->alamat,
+            'hp' => $request->hp,
+            'kelas_id' => $request->kelas_id,
+        ]);
+
         return redirect('/mahasiswa')->with('success', 'Mahasiswa Berhasil Diupdate!');
     }
 
@@ -110,5 +140,12 @@ class MahasiswaController extends Controller
     {
         MahasiswaModel::where('id', $id)->delete();
         return redirect('/mahasiswa')->with('success', 'Mahasiswa Berhasil Dihapus!');
+    }
+
+    public function cetak_pdf($id) {
+        $khs = MahasiswaMataKuliahModel::where('mahasiswa_id',$id)->get();
+        $mahasiswa = MahasiswaModel::find($id);
+        $pdf = PDF::loadview('mahasiswa.mahasiswa_pdf', ['mahasiswa' => $mahasiswa, 'khs' => $khs]);
+        return $pdf->stream();
     }
 }
