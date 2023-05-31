@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="card-body">
-            <button class="btn btn-sm btn-success my-2" data-toggle="modal" data-target="#modal_mahasiswa">Tambah Data</button>
+            <button class="btn btn-sm btn-success my-2" onclick="tambahData()">Tambah Data</button>
             <table class="table table-bordered table-striped" id="data-mahasiswa">
                 <thead>
                 <tr>
@@ -120,6 +120,14 @@
 
 @push('scripts')
     <script>
+        function tambahData() {
+            $('#modal_mahasiswa').modal('show');
+            $('#modal_mahasiswa .modal-title').html('Tambah Data Mahasiswa');
+            $('#modal_mahasiswa #nim').val('');
+            $('#modal_mahasiswa #nama').val('');
+            $('#modal_mahasiswa #hp').val('');
+        }
+
         function updateData(th){
             $('#modal_mahasiswa').modal('show');
             $('#modal_mahasiswa .modal-title').html('Edit Data Mahasiswa');
@@ -146,13 +154,9 @@
                     {data: 'hp', name: 'hp', orderable: false },
                     {data: 'id',
                         render: function (id, type, row, meta) {
-                            return `<button data-url="{{ url('/mahasiswa')}}/`+id+`" class="btn btn-xs btn-warning" onclick="updateData(this)" data-id="`+row.id+`" data-nim="`+row.nim+`" data-nama="`+row.nama+`" data-hp="`+row.hp+`"><i class="fa fa-edit"></i> Edit</button>` +
-                                '<a href="{{ url('/mahasiswa') }}/' + id + '/edit" class="btn btn-sm btn-warning mr-2">Edit</a>' +
-                                '<form class="d-inline" method="POST" action="{{ url('/mahasiswa') }}/' + id + '">' +
-                                '@csrf' +
-                                '@method("DELETE")' +
-                                '<button type="submit" onclick="return confirm(\'yakin kah bang?\')" href="{{ url('/mahasiswa') }}/' + id + '" class="btn btn-sm btn-danger">Delete</button>' +
-                                '</form>';
+                            return '<a href="{{ url('/mahasiswa') }}/' + id + '/edit" class="btn btn-sm btn-info mr-2"><i class="fa fa-eye mr-1"></i>Show</a>' +
+                                `<button data-url="{{ url('/mahasiswa')}}/`+id+`" class="btn btn-sm mr-2 btn-warning" onclick="updateData(this)" data-id="`+row.id+`" data-nim="`+row.nim+`" data-nama="`+row.nama+`" data-hp="`+row.hp+`"><i class="fa fa-edit"></i> Edit</button>` +
+                                '<button type="submit" onclick="return confirm(\'yakin kah bang?\')" href="{{ url('/mahasiswa') }}/' + id + '" class="btn btn-sm btn-danger">Delete</button>';
                         }, orderable: false
                     },
                 ]
