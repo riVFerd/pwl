@@ -92,19 +92,19 @@
                         <div class="form-group required row mb-2">
                             <label class="col-sm-2 control-label col-form-label">NIM</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control form-control-sm" id="nim" name="nim" value="" />
+                                <input type="text" class="form-control form-control-sm" id="nim" name="nim" value=""/>
                             </div>
                         </div>
                         <div class="form-group required row mb-2">
                             <label class="col-sm-2 control-label col-form-label">Nama</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control form-control-sm" id="nama" name="nama" value="" />
+                                <input type="text" class="form-control form-control-sm" id="nama" name="nama" value=""/>
                             </div>
                         </div>
                         <div class="form-group required row mb-2">
                             <label class="col-sm-2 control-label col-form-label">No. HP</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control form-control-sm" id="hp" name="hp" value="" />
+                                <input type="text" class="form-control form-control-sm" id="hp" name="hp" value=""/>
                             </div>
                         </div>
                     </div>
@@ -116,11 +116,34 @@
             </div>
         </form>
     </div>
+
+    {{--    detail mahasiswa modal--}}
+    <div class="modal fade" id="modal_detail_mahasiswa" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Detail Mahasiswa</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="detail-mahasiswa-body">
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
     <script>
+        let dataMahasiswa = null;
+
         function tambahData() {
+            $('.form-message').empty();
             $('#modal_mahasiswa').modal('show');
             $('#modal_mahasiswa .modal-title').html('Tambah Data Mahasiswa');
             $('#modal_mahasiswa #nim').val('');
@@ -128,7 +151,7 @@
             $('#modal_mahasiswa #hp').val('');
         }
 
-        function updateData(th){
+        function updateData(th) {
             $('#modal_mahasiswa').modal('show');
             $('#modal_mahasiswa .modal-title').html('Edit Data Mahasiswa');
             $('#modal_mahasiswa #nim').val($(th).data('nim'));
@@ -138,8 +161,79 @@
             $('#modal_mahasiswa #form_mahasiswa').append('<input type="hidden" name="_method" value="PUT">');
         }
 
+        function showData(id) {
+            $('#modal_detail_mahasiswa').modal('show');
+
+            $.ajax({
+                method: 'GET',
+                url: '{{ url('/mahasiswa/detail') }}' + '/' + id,
+                success: (response) => {
+                    $('#detail-mahasiswa-body').empty();
+                    const tempHtml = `
+                        <h1>Detail Mahasiswa</h1>
+                        <div class="d-flex justify-content-center">
+                            <img src="{{ asset('storage') }}/${response.foto}" width="240">
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><b>Nim : </b>${response.nim}</li>
+                            <li class="list-group-item"><b>Nama : </b>${response.nama}</li>
+                            <li class="list-group-item"><b>Jenis Kelamin : </b>${response.jk}</li>
+                            <li class="list-group-item"><b>Tempat Lahir : </b>${response.tempat_lahir}</li>
+                            <li class="list-group-item"><b>Tanggal Lahir : </b>${response.tanggal_lahir}</li>
+                            <li class="list-group-item"><b>Alamat : </b>${response.alamat}</li>
+                            <li class="list-group-item"><b>No. Hp : </b>${response.hp}</li>
+                        </ul>
+                        <a href="{{ url('/mhs/cetak_pdf/')}}/${response.id}" class="btn btn-primary">Cetak KRS</a>
+                        `;
+                        {{--<table class="table table-bordered table-striped mt-2 text-center">--}}
+                        {{--    <thead>--}}
+                        {{--    <tr>--}}
+                        {{--        <th>MataKuliah</th>--}}
+                        {{--        <th>SKS</th>--}}
+                        {{--        <th>Semester</th>--}}
+                        {{--        <th>Nilai</th>--}}
+                        {{--    </tr>--}}
+                        {{--    </thead>--}}
+                        {{--    <tbody>--}}
+                        {{--    @if($khs->count() > 0)--}}
+                        {{--        @foreach($khs as $row)--}}
+                        {{--        <tr>--}}
+                        {{--            <td>{{ $row->matakuliah->nama }}</td>--}}
+                        {{--                <td>{{ $row->matakuliah->sks }}</td>--}}
+                        {{--                <td>{{ $row->matakuliah->semester }}</td>--}}
+                        {{--                <td>{{ $row->nilai}}</td>--}}
+                        {{--            </tr>--}}
+                        {{--        @endforeach--}}
+                        {{--        @else--}}
+                        {{--        <tr>--}}
+                        {{--            <td colspan="6" class="text-center">Data tidak ada</td>--}}
+                        {{--        </tr>--}}
+                        {{--    @endif--}}
+                        {{--        </tbody>--}}
+                        {{--    </table>`;--}}
+                    $('#detail-mahasiswa-body').append(tempHtml);
+                }
+            });
+        }
+
+        function deleteData(id) {
+            if ( confirm('yakin kah bang?')) {
+                $.ajax({
+                    method: 'POST',
+                    url: '{{ url('/mahasiswa/delete') }}' + '/' + id,
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                    },
+                    success: (response) => {
+                        dataMahasiswa.ajax.reload();
+                        alert(response.message);
+                    },
+                });
+            }
+        }
+
         $(document).ready(function () {
-            let dataMahasiswa = $('#data-mahasiswa').DataTable({
+            dataMahasiswa = $('#data-mahasiswa').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
@@ -148,41 +242,41 @@
                     'type': 'POST',
                 },
                 columns: [
-                    {data: 'nomor', sercable:false, orderable:false },
-                    {data: 'nim', name: 'nim', orderable: false },
-                    {data: 'nama', name: 'nama' },
-                    {data: 'hp', name: 'hp', orderable: false },
-                    {data: 'id',
+                    {data: 'nomor', sercable: false, orderable: false},
+                    {data: 'nim', name: 'nim', orderable: false},
+                    {data: 'nama', name: 'nama'},
+                    {data: 'hp', name: 'hp', orderable: false},
+                    {
+                        data: 'id',
                         render: function (id, type, row, meta) {
-                            return '<a href="{{ url('/mahasiswa') }}/' + id + '/edit" class="btn btn-sm btn-info mr-2"><i class="fa fa-eye mr-1"></i>Show</a>' +
-                                `<button data-url="{{ url('/mahasiswa')}}/`+id+`" class="btn btn-sm mr-2 btn-warning" onclick="updateData(this)" data-id="`+row.id+`" data-nim="`+row.nim+`" data-nama="`+row.nama+`" data-hp="`+row.hp+`"><i class="fa fa-edit"></i> Edit</button>` +
-                                '<button type="submit" onclick="return confirm(\'yakin kah bang?\')" href="{{ url('/mahasiswa') }}/' + id + '" class="btn btn-sm btn-danger">Delete</button>';
+                            return '<button onclick="showData(' + id + ')" class="btn btn-sm btn-info mr-2"><i class="fa fa-eye mr-1"></i>Show</button>' +
+                                `<button data-url="{{ url('/mahasiswa')}}/` + id + `" class="btn btn-sm mr-2 btn-warning" onclick="updateData(this)" data-id="` + row.id + `" data-nim="` + row.nim + `" data-nama="` + row.nama + `" data-hp="` + row.hp + `"><i class="fa fa-edit"></i> Edit</button>` +
+                                '<button type="submit" onclick="deleteData(' + id + ')" href="{{ url('/mahasiswa') }}/' + id + '" class="btn btn-sm btn-danger">Delete</button>';
                         }, orderable: false
                     },
                 ]
             });
 
-            $('#form_mahasiswa').submit(function(e){
+            $('#form_mahasiswa').submit(function (e) {
                 e.preventDefault();
                 $.ajax({
                     url: $(this).attr('action'),
                     method: "POST",
                     data: $(this).serialize(),
                     dataType: 'json',
-                    success:function(data){
+                    success: function (data) {
                         $('.form-message').html('');
-                        if(data.status){
+                        if (data.status) {
                             $('.form-message').html('<span class="alert alert-success" style="width: 100%">' + data.message + '</span>');
                             $('#form_mahasiswa')[0].reset();
                             dataMahasiswa.ajax.reload();
                             $('#form_mahasiswa').attr('action', '{{ url('mahasiswa') }}');
                             $('#form_mahasiswa').find('input[name="_method"]').remove();
-                        }else{
+                        } else {
                             $('.form-message').html('<span class="alert alert-danger" style="width: 100%">' + data.message + '</span>');
-                            alert('error');
                         }
 
-                        if(data.modal_close){
+                        if (data.modal_close) {
                             $('.form-message').html('');
                             $('#modal_mahasiswa').modal('hide');
                         }

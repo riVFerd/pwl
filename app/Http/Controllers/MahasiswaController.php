@@ -36,7 +36,7 @@ class MahasiswaController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function storeOld(Request $request)
@@ -77,11 +77,11 @@ class MahasiswaController extends Controller
         ];
 
         $validator = Validator::make($request->all(), $rule);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => false,
                 'modal_close' => false,
-                'message' => 'Data gagal ditambahkan. ' .$validator->errors()->first(),
+                'message' => 'Data gagal ditambahkan. ' . $validator->errors()->first(),
                 'data' => $validator->errors()
             ]);
         }
@@ -90,7 +90,7 @@ class MahasiswaController extends Controller
         return response()->json([
             'status' => ($mhs),
             'modal_close' => false,
-            'message' => ($mhs)? 'Data berhasil ditambahkan' : 'Data gagal ditambahkan',
+            'message' => ($mhs) ? 'Data berhasil ditambahkan' : 'Data gagal ditambahkan',
             'data' => null
         ]);
     }
@@ -98,12 +98,12 @@ class MahasiswaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\MahasiswaModel  $mahasiswa
+     * @param \App\Models\MahasiswaModel $mahasiswa
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $khs = MahasiswaMataKuliahModel::where('mahasiswa_id',$id)->get();
+        $khs = MahasiswaMataKuliahModel::where('mahasiswa_id', $id)->get();
         $mahasiswa = MahasiswaModel::find($id);
         return view('mahasiswa.show_mahasiswa', ['mahasiswa' => $mahasiswa, 'khs' => $khs]);
     }
@@ -111,7 +111,7 @@ class MahasiswaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\MahasiswaModel  $mahasiswa
+     * @param \App\Models\MahasiswaModel $mahasiswa
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -124,8 +124,8 @@ class MahasiswaController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\MahasiswaModel  $mahasiswa
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\MahasiswaModel $mahasiswa
      * @return \Illuminate\Http\Response
      */
     public function updateOld(Request $request, $id)
@@ -161,17 +161,17 @@ class MahasiswaController extends Controller
     public function update(Request $request, $id)
     {
         $rule = [
-            'nim' => 'required|string|max:10|unique:mahasiswa,nim,'.$id,
+            'nim' => 'required|string|max:10|unique:mahasiswa,nim,' . $id,
             'nama' => 'required|string|max:50',
             'hp' => 'required|digits_between:6,15',
         ];
 
         $validator = Validator::make($request->all(), $rule);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => false,
                 'modal_close' => false,
-                'message' => 'Data gagal diedit. ' .$validator->errors()->first(),
+                'message' => 'Data gagal diedit. ' . $validator->errors()->first(),
                 'data' => $validator->errors()
             ]);
         }
@@ -181,7 +181,7 @@ class MahasiswaController extends Controller
         return response()->json([
             'status' => ($mhs),
             'modal_close' => $mhs,
-            'message' => ($mhs)? 'Data berhasil diedit' : 'Data gagal diedit',
+            'message' => ($mhs) ? 'Data berhasil diedit' : 'Data gagal diedit',
             'data' => null
         ]);
     }
@@ -189,7 +189,7 @@ class MahasiswaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\MahasiswaModel  $mahasiswa
+     * @param \App\Models\MahasiswaModel $mahasiswa
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -198,8 +198,9 @@ class MahasiswaController extends Controller
         return redirect('/mahasiswa')->with('success', 'Mahasiswa Berhasil Dihapus!');
     }
 
-    public function cetak_pdf($id) {
-        $khs = MahasiswaMataKuliahModel::where('mahasiswa_id',$id)->get();
+    public function cetak_pdf($id)
+    {
+        $khs = MahasiswaMataKuliahModel::where('mahasiswa_id', $id)->get();
         $mahasiswa = MahasiswaModel::find($id);
         $pdf = PDF::loadview('mahasiswa.mahasiswa_pdf', ['mahasiswa' => $mahasiswa, 'khs' => $khs]);
         return $pdf->stream();
@@ -212,5 +213,20 @@ class MahasiswaController extends Controller
         return DataTables::of($data)
             ->addIndexColumn()
             ->make(true);
+    }
+
+    public function getDetail($id)
+    {
+        $mahasiswa = MahasiswaModel::find($id);
+
+        return response()->json($mahasiswa);
+    }
+
+    public function delete($id)
+    {
+        $status = MahasiswaModel::where('id', $id)->delete();
+        $message = 'Data gagal dihapus';
+        if ($status) $message = 'Data berhasil dihapus';
+        return response()->json(['message' => $message]);
     }
 }
